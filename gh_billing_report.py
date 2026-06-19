@@ -28,7 +28,6 @@ import requests
 
 API_ROOT = "https://api.github.com"
 API_VERSION = "2026-03-10"
-DEFAULT_ENTERPRISE = "octodemo"
 
 ALL_SECTIONS = ["ghec", "ghas", "copilot", "usage-summary", "ai-usage"]
 
@@ -561,9 +560,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         description="Pull GitHub licensing & usage information on demand.")
     parser.add_argument(
         "--enterprise", "-e",
-        default=os.environ.get("GITHUB_ENTERPRISE", DEFAULT_ENTERPRISE),
-        help="Enterprise slug (default: env GITHUB_ENTERPRISE or "
-             f"'{DEFAULT_ENTERPRISE}').")
+        default=os.environ.get("GITHUB_ENTERPRISE"),
+        help="Enterprise slug. Defaults to the GITHUB_ENTERPRISE "
+             "environment variable.")
     parser.add_argument(
         "--org", "-o", default=None,
         help="Optional organization login for Copilot Business seat data.")
@@ -612,6 +611,12 @@ def collect(client: GitHubBillingClient, args: argparse.Namespace,
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
+
+    if not args.enterprise:
+        print("error: no enterprise slug provided. Set the GITHUB_ENTERPRISE "
+              "environment variable or pass --enterprise/-e.",
+              file=sys.stderr)
+        return 2
 
     token = os.environ.get("GITHUB_TOKEN", "")
     if not token:

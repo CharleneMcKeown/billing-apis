@@ -45,10 +45,12 @@ python3 -m venv .venv
 
 ## Authentication
 
-Set a Personal Access Token in the `GITHUB_TOKEN` environment variable:
+Set a Personal Access Token in the `GITHUB_TOKEN` environment variable, and the
+target enterprise slug in `GITHUB_ENTERPRISE`:
 
 ```bash
 export GITHUB_TOKEN="<your-token>"
+export GITHUB_ENTERPRISE="<your-enterprise-slug>"
 ```
 
 The token must belong to an **enterprise administrator or billing manager**.
@@ -66,7 +68,7 @@ continues.
 ## Usage
 
 ```bash
-# Everything (table), default enterprise = octodemo
+# Everything (table), enterprise from $GITHUB_ENTERPRISE
 .venv/bin/python gh_billing_report.py
 
 # Specific enterprise, JSON output
@@ -86,7 +88,7 @@ continues.
 
 | Flag | Description |
 |------|-------------|
-| `--enterprise, -e` | Enterprise slug (default: `$GITHUB_ENTERPRISE` or `octodemo`) |
+| `--enterprise, -e` | Enterprise slug (default: `$GITHUB_ENTERPRISE`; required) |
 | `--org, -o` | Org login for Copilot Business seat data |
 | `--section, -s` | `ghec`, `ghas`, `copilot`, `usage-summary`, `ai-usage`, or `all` (repeatable) |
 | `--format, -f` | `table` (default) or `json` |
